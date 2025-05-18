@@ -1,26 +1,25 @@
-import time
+import time  # to add a delay for print statements
 
 # Program that takes the input of a student's grade and favorite subject
 # and recommends subjects to study
 
-# define the subject dictonaries
 
+# define the subject dictonaries
 ele_math = {
-    1: "Arithmetic",
-    2: "Fractions and Decimals",
+    1: "Numbers and Counting",
+    2: "Arithmetic",
     3: "Basic Geometry",
-    4: "Introduction to Algebra",
-    5: "Basic Measurement",
-    6: "Intro to Probability and Statistics",
-    7: "Basic Number Theory",
-    8: "Algebra I",
+    4: "Basic Measurement",
+    5: "Fractions and Decimals",
+    6: "Introduction to Algebra",
+    7: "Algebra I",
+    8: "Geometry",
     9: "Algebra II",
-    10: "Geometry",
+    10: "Precalculus",
     11: "Trigonometry",
-    12: "Precalculus",
-    13: "Probability and Statistics",
-    14: "Discrete Mathematics",
-    15: "Mathematical Modeling"
+    12: "Basic Number Theory",
+    13: "Intro to Probability and Statistics",
+    14: "Intro to Physics"
 }
 ele_sci = {
     1: "General Science (Basic observation, scientific method)",
@@ -35,7 +34,6 @@ ele_sci = {
     10: "Intro to Anatomy",
     11: "Intro to Astronomy",
     12: "Intro to Physiology",
-    13: "Intro to Physics"
 }
 ele_arts = {
     1: "Reading and Basic Literature",
@@ -105,48 +103,63 @@ uni_dicts = {
     "art": uni_arts
 }
 
-
-# subject = []
-# grade = 0
-# uni_yr = 0
-
-'''print('Welcome to the class recomendation bot!')
+# Introduction to the recomendation bot
+print('Welcome to the class recomendation bot!')
 print('Given your grade or college year I recommend classes for your favorite subject!\n')
-time.sleep(2)
+time.sleep(1)  # Gives use a chance to read the intro
 print('Subjects are: Math, Science, and Arts/Humanities.')
 
 # Takes subject input and stores it as the subject variable'''
 subject = input('What is your favorite subject?\n').strip().lower()[:3]
-
 print('Execllent Choice!\n')
-print(subject)
 
-# Function to set the dictonary for the favorite subject
+# Function to set the dictonary for the favorite subject and grade number
 
 
 def ask_grade():
-    uni_answer = input('Are you in Uni? (yes/no)\n').strip().lower()[:1]
+    # Sets the variable of being in college or not
+    # and sets the year to determine class recommendations
+    uni_answer = input(
+        'Are you in College/University? (yes/no)\n').strip().lower()[:1]
+    # Takes Year as input and sets which dictionary to use
     if uni_answer == "y":
         use_dict = uni_dicts.get(subject)
-        grade_num = int(input('What year are you in?'))
+        grade_num = int(input('What year are you in? (1-4)\n'))
+        # Pushes the variables out of the funtion and to the main program
         return use_dict, grade_num
-
+    # If not in College, runs the else section to find the grade
     else:
         print("You'll be there soon enough!")
+        # Takes grade as input and sets which dictionary to use
         grade = input("What grade are you in? (K-12):\n")
         if grade == "k":
             grade_num = 1
         else:
             grade_num = int(grade)
         use_dict = ele_dicts.get(subject)
-        return grade_num
+        # Pushes the variables out of the funtion and to the main program
+        return use_dict, grade_num
 
 
+# Initializes the variables from the funtion
 use_dict, grade_num = ask_grade()
-recommended = use_dict.get(grade_num)
 
-ask_grade()
-print(recommended)
-# print(subject)
-# print(grade_num)
-# print(recommended)
+# This will return a subject from the dict based on their grade/year input
+# recommended = use_dict.get(grade_num)
+
+
+# Because range is exclusive at the end, not inclusive, we have to use +3 in python.
+# Key_range finds the range around the grade_num input
+key_range = range(max(1, grade_num - 2), grade_num + 3)
+
+# Runs a for loop to return the recommended classes around the grade/year input
+# k = key. So the loop finds the key value, then sets the range (-2, +3) around the key and returns
+# 5 recommended classes.
+recommended_range = [use_dict.get(k)
+                     for k in key_range if use_dict.get(k) is not None]
+
+# Prints the 5 recommded classes for the users favorite subject,
+# based on their education level
+print("Recommended subjects in your range:")
+for rec in recommended_range:
+    print("-", rec)
